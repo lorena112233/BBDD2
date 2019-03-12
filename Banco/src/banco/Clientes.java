@@ -5,6 +5,8 @@ package banco;
 //import java.sql.ResultSet;
 import java.util.Scanner;
 
+import com.mysql.jdbc.PreparedStatement;
+
 //import com.mysql.jdbc.Statement;
 
 public class Clientes {
@@ -13,6 +15,10 @@ public class Clientes {
 		// Desarrollado el Main - se llama a los metodos desde el menu inicial
 		// desarrollado en la clase empleado
 		Scanner entrada = new Scanner(System.in);
+		String nombre;
+		String adress;
+		String postCode;
+		int telefono;		
 		int opcion;
 		ClienteDDBB RegistroDatosUser = new ClienteDDBB();
 
@@ -55,8 +61,8 @@ public class Clientes {
 //			Statement miStatement = (Statement) miConexion.createStatement();
 //
 ////******** INSERT *******
-//			String instruccionSql = "INSERT INTO CLIENTES (IDCLIENTE, NOMBRE, ADRESS, POSTCODE, TELEFONO, DOB) values(1323, 'Juan', 'PASEO, 2', '95687', 777111111, '1855-07-08')";
-//			miStatement.executeUpdate(instruccionSql);
+//			String instruccionSql = "INSERT INTO CLIENTES (IdCliente, Nombre, Adress, PostCode, Telefono) values(1323, 'Juan', 'PASEO, 2', '95687', 777111111, '1855-07-08')";			
+//		miStatement.executeUpdate(instruccionSql);
 //
 //			// dejo comentado el insert, porque ya lo he hecho, y me da error porque es
 //			// repetido
@@ -77,6 +83,9 @@ public class Clientes {
 //			// si quiero saber el tipo de error
 //			e.printStackTrace();
 //		}
+		
+
+
 	}
 
 }

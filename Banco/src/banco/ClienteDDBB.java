@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 public class ClienteDDBB {
@@ -13,7 +14,14 @@ public class ClienteDDBB {
 	private String adress;
 	private String postCode;
 	private int telefono;
+	
+    // create a mysql database connection
+    String myDriver = "org.gjt.mm.mysql.Driver";
+    String myUrl = "jdbc:mysql://localhost:3306/Banco";
+    //Class.forName(myDriver);
+    
 
+    
 	// ++++++++++ getters y setters +++++++++
 	public int getidCliente() {
 		return idCliente;
@@ -110,20 +118,33 @@ public class ClienteDDBB {
 	public void insert() {
 		try {
 			// generar la conexion
-			Connection miConexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Banco", "root", "");
+			Connection miConexion = DriverManager.getConnection(myUrl, "root", "");
 
 			// crear un objeto de tipo Statement para realizar las consultas
 			Statement miStatement = (Statement) miConexion.createStatement();
 
 //******** INSERT *******
-//			String instruccionSql = "INSERT INTO CLIENTES (NOMBRE, ADRESS, POSTCODE, TELEFONO, DOB) values(nombre, adress, postCode, telefono, '1855-07-08')";
-//			miStatement.executeUpdate(instruccionSql);
+			//String instruccionSql = "INSERT INTO CLIENTES (NOMBRE, ADRESS, POSTCODE, TELEFONO) values(" + nombre + ", " + adress + ", " + postCode + " , " + telefono+ ")";
+			String instruccionSql = "INSERT INTO CLIENTES (Nombre, Adress, PostCode, Telefono)" + " values (?, ?, ?, ?)";
+			miStatement.executeUpdate(instruccionSql);
 
+		// create the mysql insert preparedstatement
+			PreparedStatement preparedStmt = miConexion.prepareStatement(instruccionSql);
+			preparedStmt.setString (1, "Barney");
+			preparedStmt.setString (2, "Rubble");
+			preparedStmt.setString (3, "777788");
+			preparedStmt.setInt    (4, 555555);
+			
+			// execute the preparedstatement
+			preparedStmt.execute();
+			
+			
+			
 			// dejo comentado el insert, porque ya lo he hecho, y me da error porque es
 			// repetido
 // ******* UPDATE *******
-			String instruccionSql = "UPDATE CLIENTES SET TELEFONO = 100557 WHERE NOMBRE = 'FERNANDA'";
-			miStatement.executeUpdate(instruccionSql);
+//			String instruccionSql = "UPDATE CLIENTES SET TELEFONO = 100557 WHERE NOMBRE = 'FERNANDA'";
+//			miStatement.executeUpdate(instruccionSql);
 
 			// ejecutar sql
 			ResultSet miResulset = miStatement.executeQuery("SELECT * FROM CLIENTES");
@@ -133,15 +154,18 @@ public class ClienteDDBB {
 				System.out.println(miResulset.getString("Nombre") + " " + miResulset.getString("Telefono"));
 
 			}
+			miConexion.close();
 		} catch (Exception e) {
 			System.out.println("no conecta!");
 			// si quiero saber el tipo de error
 			e.printStackTrace();
 		}
 	}
+	
 	@Override
 	public String toString() {
-		return "\nnombre=" + this.nombre + "\nedad=" + this.adress + "\nSalario: " + this.postCode + "\nSexo: " + this.telefono + "\n";
+		return "\nnombre=" + this.nombre + "\nadress=" + this.adress + "\nCP: " + this.postCode + "\nTelefono: " + this.telefono + "\n";
 	}
 
 }
+
